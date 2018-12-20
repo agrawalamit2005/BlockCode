@@ -91,6 +91,11 @@ contract LandAssets{
         //return 0x90c3B877CA2d8406B22BdF63651343BDdEE47804;
         return assetsData[assetId].owner;
     }
+
+    function viewAssetsP_ByerBasedOnOwner(uint assetId) public view returns (address){
+        //return 0x90c3B877CA2d8406B22BdF63651343BDdEE47804;
+        return assetsData[assetId].prospectiveBuyer;
+    }
     
     modifier onlyByRegistrars(address _account)
     {

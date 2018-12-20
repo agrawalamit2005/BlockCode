@@ -78,6 +78,8 @@ window.App = { //where to close
 			sim.viewAssetsBasedOnOwner(assetView, {from: accounts[0], gas:3000000}).
 			then(function(value){
 				$("#ownerInfo").text(value);
+				sim.viewAssetsP_ByerBasedOnOwner(assetView, {from: accounts[0], gas:3000000}).
+				then(function(value){ $("#pByerInfo").text(value);})
 			});
 		});
 		
