@@ -27,7 +27,7 @@ contract LandAssets{
             return status;
     }
     
-    
+    event AssetEvent(address txAddres, uint indexed assetID);
     function addAssets(uint assetId, address assetOwner) payable public onlyByRegistrars(msg.sender) returns (bool){
         if (assetIds[assetId] != true)
         {
@@ -38,15 +38,19 @@ contract LandAssets{
             asst.seller = msg.sender;
             asst.prospectiveBuyer = 0;
             assetsData[assetId] = asst;
+            emit AssetEvent( assetOwner, assetId);
         }
         else
+        {
+            emit AssetEvent( 0, 0);
             return false;
+        }
+
         
         return true;
         
     }
 
-    
     //Make this payable to become part of the transaction
     function intendToSell(address buyer, uint assetId) public payable returns (bool){
         if(assetIds[assetId] == true) {
@@ -54,16 +58,23 @@ contract LandAssets{
             if(asst.owner == msg.sender) {
                 asst.prospectiveBuyer = buyer;
                 assetsData[assetId] = asst;
+                emit AssetEvent( buyer, assetId);
             }
-            else
+            else {
+                emit AssetEvent( 0, 0);
                 return false;
+            }
         }
-        else
+        else {
+            emit AssetEvent( 0, 0);
             return false;
+        }
             
         return true;
     }
     
+    event AssetPurchased(address buyer,address seller,address indexed registrar,uint indexed assetSold);
+
     //Make this payable to become part of the transaction
     function transferAssets(address seller, address buyer, address registrar, uint assetId) payable public onlyByRegistrars(msg.sender) returns (bool)
     {
@@ -75,10 +86,13 @@ contract LandAssets{
                 asst.seller = seller;
                 asst.registrar = registrar;
                 assetsData[assetId] = asst;
+                emit AssetPurchased(buyer,seller,registrar,assetId);
                 return true;
             }
-            else
+            else {
+                emit AssetPurchased(0,0,0,0);
                 return false;
+            }
         }
         else
             return false;       

@@ -37,23 +37,43 @@ window.App = { //where to close
 		Assets.deployed().then(function(instance){
 			sim=instance;
 			sim.transferAssets(seller,buyer,registar,assetId, {from: accounts[0], gas:3000000}).
-			then(function(value){
-				//console.log(result);
-				//console.log("Assets Transferred");
-			});
-			
-			//.catch(function(error){console.log(error)});
+			then(function(result) {
+				var AssetPurchasedEvent  = sim.AssetPurchased();
+				AssetPurchasedEvent.watch(function(error, result){
+					if (!error) {
+						if(result.args.assetSold != 0) {
+						$("#transferResult").html("Success: Asset ID (" + result.args.assetSold + ")  transferred to new owner: (" + result.args.buyer + ' )');
+						}
+						else {
+							$("#transferResult").html("Failure: could not be assigned for Prospective buyer");
+						}
+					} else {
+						console.log(error);
+					}
+				});
+			  });
 		});
 	},
 	addAssets: function(assetId,owner) {
 		var sim;
 		Assets.deployed().then(function(instance){
 			sim=instance;
-			sim.addAssets(assetId, owner,{from: accounts[0], gas:3000000}).
-			then(function(){return sim.status.call()}).
-			then(function(value){
-				console.log(value);
-			})
+			return sim.addAssets(assetId, owner,{from: accounts[0], gas:3000000}).
+			then(function(result) {
+				var AssetForSaleEvent  = sim.AssetEvent();
+				AssetForSaleEvent.watch(function(error, result){
+					if (!error) {
+						if(result.args.assetID != 0) {
+						$("#addAssetResult").html("Success: Asset ID (" + result.args.assetID + ")  for onwer: (" + result.args.txAddres + ' )');
+						}
+						else{
+							$("#addAssetResult").html("Failure: Asset is already assigned ");
+						}
+					} else {
+						console.log(error);
+					}
+				});
+			  });
 		});
 	},
 	
@@ -90,9 +110,21 @@ window.App = { //where to close
 		Assets.deployed().then(function(instance){
 			sim=instance;
 			sim.intendToSell(buyer, assetId, {from: accounts[0], gas:3000000}).			
-			then(function(value){
-				console.log(value);
-			});
+			then(function(result) {
+				var AssetForSaleEvent  = sim.AssetEvent();
+				AssetForSaleEvent.watch(function(error, result){
+					if (!error) {
+						if(result.args.assetID != 0) {
+						$("#intentToSellResult").html("Success: Asset ID (" + result.args.assetID + ")  For Prospective buyer: (" + result.args.txAddres + ' )');
+						}
+						else{
+							$("#intentToSellResult").html("Failure: could not be assigned for Prospective buyer");
+						}
+					} else {
+						console.log(error);
+					}
+				});
+			  });
 		});
 	}	
 	
