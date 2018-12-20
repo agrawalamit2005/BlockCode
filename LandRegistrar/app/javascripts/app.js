@@ -36,10 +36,13 @@ window.App = { //where to close
 		var sim;
 		Assets.deployed().then(function(instance){
 			sim=instance;
-			sim.transferAssets(seller,buyer,registar,asssetId, {from: accounts[0], gas:3000000}).then(function(result){
-				console.log(result);
-				console.log("Assets Transferred");
-			}).catch(function(error){console.log(error)});
+			sim.transferAssets(seller,buyer,registar,assetId, {from: accounts[0], gas:3000000}).
+			then(function(value){
+				//console.log(result);
+				//console.log("Assets Transferred");
+			});
+			
+			//.catch(function(error){console.log(error)});
 		});
 	},
 	addAssets: function(assetId,owner) {
@@ -56,9 +59,9 @@ window.App = { //where to close
 	
 	addRegistar: function(registar) {
 		var sim;
-		alert("in add registar registar::::::::::"+ registar)
+		//alert("in add registar registar::::::::::"+ registar)
 		Assets.deployed().then(function(instance){
-			alert("in add registar instance::::::::::"+ instance)
+			//alert("in add registar instance::::::::::"+ instance)
 			sim=instance;
 			sim.addRegistrar(registar,{from: accounts[0], gas:3000000}).then(function(){
 				//alert("line");				
@@ -69,12 +72,27 @@ window.App = { //where to close
 	viewAssetsBasedOnOwner : function(assetView){
 		//alert(assetView);
 		var sim;
+		$("#ownerInfo").text("Hello Amit Entry!");
 		Assets.deployed().then(function(instance){
-			// console.log(instance);
-			alert("here");
-			return sim.viewAssetsBasedOnOwner.call(assetView,{from:accounts[0]})
-		}).then(function(value){alert("hi");v2=value;document.getElementById("ownerInfo").innerHTML=v2})
-	}
+			sim=instance;
+			sim.viewAssetsBasedOnOwner(assetView, {from: accounts[0], gas:3000000}).
+			then(function(value){
+				$("#ownerInfo").text(value);
+			});
+		});
+		
+	},
+
+	intendToSell: function(buyer, assetId) {
+		var sim;
+		Assets.deployed().then(function(instance){
+			sim=instance;
+			sim.intendToSell(buyer, assetId, {from: accounts[0], gas:3000000}).			
+			then(function(value){
+				console.log(value);
+			});
+		});
+	}	
 	
 };//loop for main
  
@@ -103,24 +121,34 @@ window.addEventListener('load', function() {
     var buyer = $('#transForm #buyerAdd').val();
 	var registar = $('#transForm #registarAdd').val();
 	var assetId = $('#transForm #assetId').val();
-        App.transferAssets(seller,buyer,registar,assetId);
+		App.transferAssets(seller,buyer,registar,assetId);
+		return false;
     });
 	
 	$("#btn-addAssets").click(function() {
 	var assetId = $('#assetsForm #addAssets').val();
 	var owner = $('#assetsForm #ownerAdd').val();
-        App.addAssets(parseInt(assetId),owner);
+		App.addAssets(parseInt(assetId),owner);
+		return false;
     });
 	
 	$("#btn-addReg").click(function() {
 	var registar = $('#regForm #addRegistar').val();
-        App.addRegistar(registar);
+		App.addRegistar(registar);
+		return false;
 	});
 	
 	$("#btn-viewAssets").click(function() {
 		var assetView = document.getElementById("viewAsset").value;
-		alert("OnCLick:"+assetView)
 			App.viewAssetsBasedOnOwner(assetView);
-		});
+			return false;
+	});
+
+	$("#btn-intentToSell").click(function() {
+		var assetId = $('#intentToSellForm #AssetsID').val();
+		var owner = $('#intentToSellForm #ownerAdd').val();
+			App.intendToSell(owner, assetId);
+			return false;
+	});
 
 });

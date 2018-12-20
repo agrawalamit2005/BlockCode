@@ -48,9 +48,9 @@ contract LandAssets{
 
     
     //Make this payable to become part of the transaction
-    function intendToSell(address buyer, uint assetId) public returns (bool){
+    function intendToSell(address buyer, uint assetId) public payable returns (bool){
         if(assetIds[assetId] == true) {
-            Asset asst= assetsData[assetId];
+            Asset asst = assetsData[assetId];
             if(asst.owner == msg.sender) {
                 asst.prospectiveBuyer = buyer;
                 assetsData[assetId] = asst;
@@ -65,9 +65,10 @@ contract LandAssets{
     }
     
     //Make this payable to become part of the transaction
-    function transferAssets(address seller, address buyer , address registrar , uint assetId) payable public returns (bool){
+    function transferAssets(address seller, address buyer, address registrar, uint assetId) payable public onlyByRegistrars(msg.sender) returns (bool)
+    {
         if(assetIds[assetId] == true) {
-            Asset asst= assetsData[assetId];
+            Asset asst = assetsData[assetId];
             if(asst.prospectiveBuyer == buyer) {
                 asst.prospectiveBuyer = 0;
                 asst.owner = buyer;
@@ -80,14 +81,14 @@ contract LandAssets{
                 return false;
         }
         else
-            return false;
-        
+            return false;       
         
     }
     
     //Viewing assets are based on assetId only. Need to think about owner as well.
     
     function viewAssetsBasedOnOwner(uint assetId) public view returns (address){
+        //return 0x90c3B877CA2d8406B22BdF63651343BDdEE47804;
         return assetsData[assetId].owner;
     }
     
