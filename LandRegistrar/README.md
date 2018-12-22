@@ -1,4 +1,4 @@
-# Starter kit - Ethereum Project
+# LandRegistrar - Ethereum Project
 
 ## Introduction
   This is a starter project kit for Ethereum Projects. 
@@ -136,7 +136,7 @@ testprc uses ethereumjs to simulate full client behavior and make developing Eth
 ### Setting Application
 
 
-1. git clone https://github.com/shalmali86/Starter_kit.git && cd Starter_kit
+1. git clone https://github.com/agrawalamit2005
 
 2. npm install
 
@@ -151,10 +151,6 @@ testprc uses ethereumjs to simulate full client behavior and make developing Eth
 7. npm run dev // To run the application in browser
 
 8. open "http://localhost:8080" in web browser
-
-9. Enter value for 3 text boxes for pricipal , period , rate
-
-10. Click on **Calculate** button 
 
 11. Metamask will open notification window 
 
